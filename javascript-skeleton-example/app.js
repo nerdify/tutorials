@@ -1,16 +1,25 @@
-const $skeletons = document.querySelectorAll(".skeleton");
+const $skeletonContainer = document.querySelector(".skeleton_container");
 
-const $profileItems = document.querySelectorAll(".profile");
+const $profileContainer = document.querySelector(".profile_container");
 
-console.log($skeletons);
+const $profileImage = document.querySelector(".profile .image img");
+const $profileName = document.querySelector(".profile .text_name");
 
-setTimeout(() => {
-  $skeletons.forEach($skeleton => {
-    $skeleton.classList.remove("skeleton");
-    $skeleton.classList.add("hidden");
+fetch("https://randomuser.me/api/")
+  .then(response => {
+    return response.json();
+  })
+  .then(data => {
+    const { name, picture } = data.results[0];
+
+    $profileImage.src = picture.large;
+    $profileName.innerText = `${name.first} ${name.last}`;
+
+    setTimeout(() => removeSkeletons(), 5000);
   });
 
-  $profileItems.forEach($profileItem => {
-    $profileItem.classList.remove("hidden");
-  });
-}, 3000);
+function removeSkeletons() {
+  $skeletonContainer.classList.add("hidden");
+
+  $profileContainer.classList.remove("hidden");
+}
